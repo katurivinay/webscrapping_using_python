@@ -1,26 +1,24 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-from bs4 import BeautifulSoup
+#importing required libraries
+from bs4 import BeautifulSoup 
 import pandas as pd
 with open('Top_100_Brands _ Comparably.html','r',encoding="utf8") as html_file:
-    content = html_file.read()
     
-    soup = BeautifulSoup(content,'lxml')
+    content = html_file.read() #reading content from the html file
     
-    #print(soup)
+    soup = BeautifulSoup(content,'lxml') #setting in a perfect format
+    
+    #variables to store data
     companies = []
     company_location = []
     industry_type = []
+    rank = [i for i in range(1,96)]
     
+    #collecting data
     company = soup.find_all('div',class_ = 'companyName')
     company_loc = soup.find_all('li',class_ = 'meta location')
     company_industry = soup.find_all('li',class_ = 'meta industry')
     
-    rank = [i for i in range(1,96)]
+    
     for data,loc,indus in zip(company,company_loc,company_industry):
         
         curr_company = data.text.lstrip('0123456789.- Rank')
@@ -31,13 +29,10 @@ with open('Top_100_Brands _ Comparably.html','r',encoding="utf8") as html_file:
         
         curr_ind = indus.text
         industry_type.append(curr_ind)
-print(len(companies))
-print(len(company_location))
-print(len(industry_type))
-print(len(rank))
 
 main_data = {'rank' : rank,'company_name' : companies , 'company_location' : company_location ,'company_industry' : industry_type}
 
+#converting data into a csv file
 data_frame = pd.DataFrame(main_data)
 print(data_frame)
-data_frame.to_csv(r'C:\Users\katur\Documents\file1.csv')
+data_frame.to_csv(r'C:\Use\t\Doc\file1.csv')
